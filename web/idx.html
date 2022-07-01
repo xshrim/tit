@@ -1,66 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <title>Title</title>
-  <link rel="stylesheet" href="./layui/css/layui.css">
-  <link rel="stylesheet" href="./layui/css/style.css">
-</head>
+<html>
+<link rel="stylesheet" href="./layui/css/layui.css" media="all">
+<script src="./layui/layui.js" charset="utf-8"></script>
 
 <body>
-  <div class="header">
-    <div class="layui-container">
-      <div class="logo">
-        <a href="" title="Layui">Layui</a>
-      </div>
-      <i class="layui-icon layui-icon-app mobile-icon"></i>
-      <div class="nav">
-        <ul class="layui-nav">
-          <li class="layui-nav-item layui-this"><a href="">网站首页</a></li>
-          <li class="layui-nav-item"><a href="">产品</a></li>
-          <li class="layui-nav-item"><a href="">活动</a></li>
-          <li class="layui-nav-item"><a href="">资讯</a></li>
-          <li class="layui-nav-item"><a href="">专题</a></li>
-          <li class="layui-nav-item"><a href="">大数据</a></li>
-          <li class="layui-nav-item"><a href="">社区</a></li>
-        </ul>
+  <form class="layui-form" action="" lay-filter="form-switch-project">
+    <div class="layui-form-item">
+      <div class="layui-input-block" id="project-switch">
+        <input type="checkbox" name="open" lay-skin="switch" lay-filter="switchTest-project" lay-text="ON|OFF"
+          value="项目显示开关" checked="">
       </div>
     </div>
-  </div>
-  <div class="layui-container main">
-    <div class="layui-row layui-col-space10">
-      <div class="layui-col-xs12 layui-col-sm6 layui-col-md4">
-        <div class="demoBox">this is a demo box</div>
-      </div>
-      <div class="layui-col-xs12 layui-col-sm6 layui-col-md4">
-        <div class="demoBox">this is a demo box</div>
-      </div>
-      <div class="layui-col-xs12 layui-col-sm6 layui-col-md4">
-        <div class="demoBox">this is a demo box</div>
-      </div>
-      <div class="layui-col-xs12 layui-col-sm6 layui-col-md4">
-        <div class="demoBox">this is a demo box</div>
-      </div>
-      <div class="layui-col-xs12 layui-col-sm6 layui-col-md4">
-        <div class="demoBox">this is a demo box</div>
-      </div>
-    </div>
-  </div>
-  <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
-  <script src="layui.js"></script>
-  <script>
-    //JavaScript代码区域
-    layui.use(['element', 'layer'], function () {
-      var element = layui.element;
-      var layer = layui.layer;
+  </form>
 
-    });
-    $(".mobile-icon").click(function () {
-      $(".nav").toggleClass('layui-show');
+  <div class="layui-form-item project-hide" style="width:200px;height:200px;background:#7ee6dc">
+    小菜鸟们冲鸭！
+  </div>
+  <div class="layui-form-item project-hide1" style="width:200px;height:200px;background:#7ee6dc">
+    大菜鸟们冲鸭！
+  </div>
+
+
+  <script>
+
+    layui.use('form', function () {
+      var form = layui.form;
+      var $ = layui.jquery;
+
+      form.on('switch(switchTest-project)', function (data) {
+
+        if ($('#project-switch input[name="open"]:checked ').val() == "项目显示开关") {
+          $(".project-hide").slideDown();
+          $(".project-hide1").slideUp();
+
+        } else {
+          $(".project-hide").slideUp();
+          $(".project-hide1").slideDown();
+        }
+        form.render('checkbox', 'form-switch-project ');
+      });
     });
   </script>
 </body>
-
-</html>

@@ -1,5 +1,3 @@
-2018-01-04
-
 <!DOCTYPE html>
 <html>
 
@@ -8,6 +6,51 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>开始使用layui</title>
   <link rel="stylesheet" href="./layui/css/layui.css">
+  <script src="./layui/layui.js"></script>
+  <script src="./layui/xm-select.js"></script>
+  <script>
+    //JavaScript代码区域
+    var $ = layui.jquery;
+    var element = layui.element;
+    var laydate = layui.laydate;
+
+    var panels = ["home", "register", "review", "myreg", "history", "system"];
+    function togglePanel(panel) {
+      panels.forEach(function (item, index, array) {
+        // item数组中的当前项, index当前项的索引, array原始数组；
+        if (panel === item) {
+          $(`#${item}`).removeClass('layui-hide-md');
+          $(`#${item}`).addClass('layui-show-md-block');
+        } else {
+          $(`#${item}`).addClass('layui-hide-md');
+          $(`#${item}`).removeClass('layui-show-md-block');
+        }
+      });
+    }
+    $(function () {
+      togglePanel("register");
+      $(".menu").click(function () {
+        togglePanel($(this).attr("lay-filter"));
+      });
+
+
+      //日期
+      laydate.render({
+        elem: '#date', type: 'datetime'
+      });
+      var demo1 = xmSelect.render({
+        el: '#principle',
+        tips: '投产人员',
+        filterable: true,
+        data: [
+          { name: '水果', value: 1 },
+          { name: '蔬菜', value: 2 },
+          { name: '桌子', value: 3 },
+          { name: '北京', value: 4 },
+        ]
+      })
+    });
+  </script>
 </head>
 
 <body class="layui-layout-body">
@@ -53,20 +96,22 @@
         <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
         <ul class="layui-nav layui-nav-tree" lay-filter="side">
           <li class="layui-nav-item layui-nav-itemed">
-            <a class="" href="javascript:;">所有商品</a>
+            <a class="" href="javascript:;">投产变更</a>
             <dl class="layui-nav-child">
-              <dd><a href="javascript:;" tab_id="11">文章列表</a></dd>
-              <dd><a href="javascript:;" tab_id="12">发送信息</a></dd>
-              <dd><a href="javascript:;" tab_id="13">权限分配</a></dd>
-              <dd><a href="javascript:;" tab_id="14" data-url="../index.html">超链接</a></dd>
+              <dd class="menu" lay-filter="register"><a href="javascript:;" tab_id="11"
+                  data-url="register.html">变更登记</a></dd>
+              <dd class="menu" lay-filter="review"><a href="javascript:;" tab_id="12" data-url="review.html">变更评审</a>
+              </dd>
+              <dd class="menu" lay-filter="myreg"><a href="javascript:;" tab_id="13" data-url="myreg.html">我的变更</a></dd>
+              <dd class="menu"><a href="javascript:;" tab_id="14" data-url="../index.html">超链接</a></dd>
             </dl>
           </li>
           <li class="layui-nav-item">
-            <a href="javascript:;">解决方案</a>
+            <a href="javascript:;">统计数据</a>
             <dl class="layui-nav-child">
-              <dd><a href="javascript:;" tab_id="21">列表一</a></dd>
-              <dd><a href="javascript:;" tab_id="22">列表二</a></dd>
-              <dd><a href="">超链接</a></dd>
+              <dd class="menu" lay-filter="history"><a href="javascript:;" tab_id="21">变更记录</a></dd>
+              <dd class="menu" lay-filter="system"><a href="javascript:;" tab_id="22">系统一览</a></dd>
+              <dd class="menu"><a href="">超链接</a></dd>
             </dl>
           </li>
           <li class="layui-nav-item"><a href="">云市场</a></li>
@@ -77,32 +122,174 @@
 
     <div class="layui-body">
       <!-- 内容主体区域 -->
-      <div style="padding: 5px;">
-        <div class="layui-tab layui-tab-brief" lay-filter="mtab" lay-allowClose="true">
-          <ul class="layui-tab-title">
-            <li class="layui-this">
-              <i class="layui-icon">
-                &#xe620;
-                <cite>控制面板</cite>
-              </i>
-            </li>
-          </ul>
-          <div class="layui-tab-content" style="min-height: 800px;border: none">
-            <div class="layui-tab-item layui-show">
-              <iframe src="../index.html"></iframe>
+      <div id="home" class="layui-fluid layui-show-md-block" style="padding: 5px;">
+        <form class="layui-form" action="">
+          <div class="layui-row layui-form-item">
+            <div class="layui-col-md2">
+              <label class="layui-form-label">需求编号</label>
+              <div class="layui-input-block">
+                <input type="text" name="title" required lay-verify="required" placeholder="请输入标题" autocomplete="off"
+                  class="layui-input">
+              </div>
             </div>
-            <!--<div class="layui-tab-item layui-show">
-                        <iframe src="http://www.hao123.com"></iframe>
-                    </div>
-                    <div class="layui-tab-item">
-                        <iframe src="http://www.taobao.com"></iframe>
-                    </div>
-                    <div class="layui-tab-item">3</div>
-                    <div class="layui-tab-item">4</div>
-                    <div class="layui-tab-item">5</div>-->
+            <div class="layui-col-md2">
+              <label class="layui-form-label">需求等级</label>
+              <div class="layui-input-block">
+                <select name="interest" lay-filter="aihao">
+                  <option value=""></option>
+                  <option value="0">写作</option>
+                  <option value="1" selected="">阅读</option>
+                  <option value="2">游戏</option>
+                  <option value="3">音乐</option>
+                  <option value="4">旅行</option>
+                </select>
+              </div>
+            </div>
+            <div class="layui-col-md4 layui-col-md-offset4">
+              偏移4列，从而在最右
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div id="register" class="layui-fluid layui-hide-md" style="padding: 5px;">
+        <form class="layui-form" action="">
+          <fieldset class="layui-elem-field layui-field-title" style="margin-top: 5px;margin-bottom: 5px;">
+            <legend>变更信息</legend>
+          </fieldset>
+          <div class="layui-row layui-form-item">
+            <div class="layui-col-md2">
+              <div class="layui-input-inline">
+                <select name="modules" lay-verify="required" lay-search="">
+                  <option value="">变更系统</option>
+                  <option value="1">layer</option>
+                  <option value="2">form</option>
+                  <option value="3">layim</option>
+                  <option value="4">element</option>
+                </select>
+              </div>
+            </div>
+            <div class="layui-col-md2">
+              <div class="layui-input-inline">
+                <select name="interest" lay-filter="aihao">
+                  <option value="">变更类型</option>
+                  <option value="0">写作</option>
+                  <option value="1">阅读</option>
+                  <option value="2">游戏</option>
+                  <option value="3">音乐</option>
+                  <option value="4">旅行</option>
+                </select>
+              </div>
+            </div>
+            <div class="layui-col-md2">
+              <div class="layui-input-inline">
+                <input type="text" name="date" id="date" lay-verify="date" placeholder="投产时间" autocomplete="off"
+                  class="layui-input">
+              </div>
+            </div>
+            <div class="layui-col-md2">
+              <div class="layui-input-inline">
+                <input type="text" name="title" required lay-verify="required" placeholder="投产方式" autocomplete="off"
+                  class="layui-input">
+              </div>
+            </div>
+            <div class="layui-col-md4">
+              <div class="layui-input-inline">
+                <input type="text" name="title" required lay-verify="required" placeholder="变更标题" autocomplete="off"
+                  class="layui-input">
+              </div>
+            </div>
+          </div>
+
+
+          <div class="layui-row layui-form-item">
+            <div class="layui-col-md2">
+              <div class="layui-input-inline">
+                <input type="text" name="title" required lay-verify="required" placeholder="需求编号" autocomplete="off"
+                  class="layui-input">
+              </div>
+            </div>
+            <div class="layui-col-md2">
+              <div class="layui-input-inline">
+                <select name="interest" lay-filter="aihao">
+                  <option value="">需求等级</option>
+                  <option value="0">写作</option>
+                  <option value="1">阅读</option>
+                  <option value="2">游戏</option>
+                  <option value="3">音乐</option>
+                  <option value="4">旅行</option>
+                </select>
+              </div>
+            </div>
+            <div class="layui-col-md2">
+              <div class="layui-input-inline">
+                <select name="interest" lay-filter="aihao">
+                  <option value="">投产启停</option>
+                  <option value="0">写作</option>
+                  <option value="1">阅读</option>
+                  <option value="2">游戏</option>
+                  <option value="3">音乐</option>
+                  <option value="4">旅行</option>
+                </select>
+              </div>
+            </div>
+            <div class="layui-col-md2">
+              <div class="layui-input-inline">
+                <div id="principle" class="xm-select-demo"></div>
+              </div>
+            </div>
+            <div class="layui-col-md4">
+              <div class="layui-input-inline">
+                <input type="text" name="title" required lay-verify="required" placeholder="需求标题" autocomplete="off"
+                  class="layui-input">
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div id="review" class="layui-fluid layui-hide-md" style="padding: 5px;">
+        <div class="layui-row">
+          <div class="layui-col-md4">
+            review
+          </div>
+          <div class="layui-col-md4 layui-col-md-offset4">
+            偏移5列，从而在最右
           </div>
         </div>
+      </div>
 
+      <div id="myreg" class="layui-fluid layui-hide-md" style="padding: 5px;">
+        <div class="layui-row">
+          <div class="layui-col-md4">
+            myreg
+          </div>
+          <div class="layui-col-md4 layui-col-md-offset4">
+            偏移5列，从而在最右
+          </div>
+        </div>
+      </div>
+
+      <div id="history" class="layui-fluid layui-hide-md" style="padding: 5px;">
+        <div class="layui-row">
+          <div class="layui-col-md4">
+            history
+          </div>
+          <div class="layui-col-md4 layui-col-md-offset4">
+            偏移5列，从而在最右
+          </div>
+        </div>
+      </div>
+
+      <div id="system" class="layui-fluid layui-hide-md" style="padding: 5px;">
+        <div class="layui-row">
+          <div class="layui-col-md4">
+            system
+          </div>
+          <div class="layui-col-md4 layui-col-md-offset4">
+            偏移5列，从而在最右
+          </div>
+        </div>
       </div>
 
     </div>
@@ -112,105 +299,7 @@
       © layui.com - 底部固定区域
     </div>
   </div>
-  <script src="./layui/layui.js"></script>
-  <script>
-    //JavaScript代码区域
-    var $ = layui.jquery,
-      element = layui.element;
-    $(document).on('click', 'a', function () {
-      if (!$(this)[0].hasAttribute("tab_id") || $(this).attr("tab_id") === '') {
-        return;
-      }
-      var layid = $(this).attr("tab_id");
-      var text = $(this).text();
-      var dataurl = $(this).attr("data-url");
-      //alert(layid);
-      var msg = true;
-      $.each($(".layui-tab-title").children(), function (i, item) {
-        var tabid = $(item).attr("lay-id");
-        // alert('遍历' + tabid);
-        if (tabid === layid) {
-          // alert('相等了');
-          msg = false;
-          return false;
-        }
 
-      });
-      // alert('msg' + msg);
-      if (msg) {
-
-        element.tabAdd('mtab', {
-          title: text,
-          content: "<iframe frameborder='0' width='100%' height='100%' src='" + dataurl + "'></iframe>",
-          id: layid
-        });
-      }
-      resize();
-      element.tabChange('mtab', layid);
-
-      element.on('tab(mtab)', function () {
-        var tabid = this.getAttribute('lay-id');
-        $.each($(".layui-nav-tree").children(), function (i, item) {
-          var current = false;
-          $.each($(item).find("a"), function (i, sub) {
-            if ($(sub).attr("tab_id") === tabid) {
-              $(sub).parent().addClass("layui-this");
-              current = true;
-              return;
-            } else {
-              $(sub).parent().removeClass("layui-this");
-            }
-          });
-          if (current) {
-            $(item).addClass("layui-nav-itemed");
-          }
-        })
-      });
-
-
-    });
-
-    function resize() {
-      var $content = $(".layui-tab-content");
-      $content.height($(this).height() - 200);
-      $content.find('iframe').each(function () {
-        $(this).height($content.height());
-        $(this).width("100%")
-
-      })
-
-    }
-
-    $(window).on('resize', function () {
-      var $content = $(".layui-tab-content");
-      $content.height($(this).height() - 200);
-      $content.find('iframe').each(function () {
-        $(this).height($content.height());
-        $(this).width("100%")
-
-      });
-
-    });
-    $(window).on('load', function () {
-      var $content = $(".layui-tab-content");
-      $content.height($(this).height() - 200);
-      $content.find('iframe').each(function () {
-        $(this).height($content.height());
-        $(this).width("100%")
-
-      });
-
-    })
-
-
-    // element.on('nav(test)', function (elem) {
-    //   console.log(JSON.stringify(elem)); //得到当前点击的DOM对象
-    //   var layid = location.hash.replace(/^#tab=/, '');
-    //   alert(layid);
-    //   element.tabChange('mytab', layid);
-    // });
-
-  </script>
 </body>
 
 </html>
