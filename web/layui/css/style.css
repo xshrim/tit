@@ -1,4 +1,68 @@
-.header {
+.vditor-reset ul ul ul {
+  list-style-type: square !important;
+}
+.vditor-reset ul ul {
+  list-style-type: circle !important;
+}
+.vditor-reset ul {
+  list-style-type: disc !important;
+}
+.vditor-reset ul,
+.vditor-reset ol {
+  padding-left: 2em;
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+.vditor-reset li + li {
+  margin-top: 0.25em;
+}
+
+.vditor-reset ul > li {
+    list-style-type: disc;
+}
+.vditor-reset ul > li > ul > li{
+    list-style-type: circle;
+}
+.vditor-reset ul > li > ul > li > ul > li{
+    list-style-type: square;
+}
+
+.vditor-reset input[type=checkbox] {
+  display: inline-block;
+}
+
+.vditor-reset ol > li {
+    margin-left: 20px;
+    padding-left: 4px;
+    list-style-type: decimal;
+}
+
+/*.vditor-reset p,
+.vditor-reset pre {
+    margin: 1em 0;
+}
+
+.vditor-reset ul > li {
+    margin-left: 20px;
+    padding-left: 4px;
+    list-style-type: circle;
+}
+
+.vditor-reset ol > li {
+    margin-left: 20px;
+    padding-left: 4px;
+    list-style-type: decimal;
+}
+
+.vditor-reset ul > li > p,
+.vditor-reset ol > li > p {
+    margin: 0.2em 0;
+}*/
+
+
+
+
+/*.header {
   background-color: #393D49;
   width: 100%;
   height: 60px;
@@ -25,7 +89,6 @@
   display: none;
 }
 
-/* 演示元素 */
 .main {
   margin-top: 20px;
 }
@@ -51,7 +114,6 @@
     position: absolute;
     z-index: 99;
     top: 61px;
-    /* 如果需要缝隙，可将值调至61px */
     margin-left: -15px;
   }
 
@@ -79,4 +141,4 @@
     height: 1px;
     background-color: #5FB878;
   }
-}
+}*/

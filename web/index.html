@@ -6,8 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>开始使用layui</title>
   <link rel="stylesheet" href="./layui/css/layui.css">
+  <link rel="stylesheet" href="./layui/css/style.css">
+  <link rel="stylesheet" href="./vditor/dist/index.css" />
+  <link rel="stylesheet" href="./layui/css/font-awesome.css" />
   <script src="./layui/layui.js"></script>
   <script src="./layui/xm-select.js"></script>
+  <script src="./vditor/dist/index.min.js"></script>
   <script>
     //JavaScript代码区域
     var $ = layui.jquery;
@@ -15,6 +19,28 @@
     var laydate = layui.laydate;
 
     var panels = ["home", "register", "review", "myreg", "history", "system"];
+
+    function getRect(elem) {
+      //var rect = elem.getBoundingClientRect();
+      var rect = elem[0].getBoundingClientRect();
+      w = rect.width || rect.right - rect.left;
+      h = rect.height || rect.bottom - rect.top;
+      ww = document.documentElement.clientWidth; //浏览器可见宽
+      hh = document.documentElement.clientHeight; //浏览器可见高
+      return { // 兼容ie多出的两个px
+        top: Math.floor(rect.top), // 元素顶边到浏览器底边距离
+        bottom: Math.floor(hh - rect.bottom), // 元素底边到浏览器底边距离
+        left: Math.floor(rect.left), // 元素左边到浏览器底边距离
+        right: Math.floor(ww - rect.right) // 元素底右到浏览器底边距离
+      };
+    };
+
+    function marginTop(from, to) {
+      var fromRect = from[0].getBoundingClientRect();
+      var toRect = to[0].getBoundingClientRect();
+      return Math.floor(fromRect.top) - Math.floor(toRect.top)
+    }
+
     function togglePanel(panel) {
       panels.forEach(function (item, index, array) {
         // item数组中的当前项, index当前项的索引, array原始数组；
@@ -27,18 +53,31 @@
         }
       });
     }
+    function toggleMore(elem, vd) {
+      if (elem.hasClass("fa-chevron-circle-down")) {
+        elem.removeClass('fa-chevron-circle-down');
+        elem.addClass('fa-chevron-circle-up');
+        $("#full").removeClass('layui-hide-md');
+      } else {
+        elem.addClass('fa-chevron-circle-down');
+        elem.removeClass('fa-chevron-circle-up');
+        $("#full").addClass('layui-hide-md');
+      }
+
+      console.log(marginTop($("#footer"), $("#vditor")));
+      //vd.vditor.options.height = marginTop($("#footer"), $("#vditor"));
+    }
+
     $(function () {
+
       togglePanel("register");
-      $(".menu").click(function () {
-        togglePanel($(this).attr("lay-filter"));
-      });
 
 
       //日期
       laydate.render({
         elem: '#date', type: 'datetime'
       });
-      var demo1 = xmSelect.render({
+      var principle = xmSelect.render({
         el: '#principle',
         tips: '投产人员',
         filterable: true,
@@ -48,7 +87,68 @@
           { name: '桌子', value: 3 },
           { name: '北京', value: 4 },
         ]
-      })
+      });
+      var kind = xmSelect.render({
+        el: '#kind',
+        tips: '投产类型',
+        filterable: true,
+        data: [
+          { name: '水果', value: 1 },
+          { name: '蔬菜', value: 2 },
+          { name: '桌子', value: 3 },
+          { name: '北京', value: 4 },
+        ]
+      });
+
+      // console.log((document.documentElement.scrollHeight > document.documentElement.clientHeight) ? document.documentElement.scrollHeight : document.documentElement.clientHeight);
+      //var vpos = getRect(document.getElementById("vditor"));
+
+      const vditor = new Vditor('vditor', {
+        "cdn": "./vditor",
+        "height": marginTop($("#footer"), $("#vditor")),
+        //"theme": "dark",
+        //"icon": "material",
+        "cache": {
+          "enable": false
+        },
+        "counter": {
+          "enable": true
+        },
+        "toolbarConfig": {
+          "pin": true
+        },
+        "outline": {
+          "enable": true
+        },
+        "resize": {
+          "enable": true
+        },
+        "speech": {
+          "enable": true
+        },
+        "toolbar": [
+          "outline", "headings", "bold", "italic", "strike", "line", "link", "|", "emoji", "table", "list", "ordered-list", "check", "outdent", "indent", "|", "quote", "code", "inline-code", "insert-after", "insert-before", "undo", "redo", "|", "upload", "record", "code-theme", "content-theme", "edit-mode", "both", "preview", "fullscreen", "export", "devtools", "info", "help", "br"
+        ],
+        "preview": {
+          "markdown": {
+            "mark": true,
+            "toc": true
+          },
+          "hljs": {
+            "lineNumber": true
+          },
+          "actions": [
+            "desktop", "tablet", "mobile", "mp-wechat"
+          ]
+        },
+      });
+
+      $(".menu").click(function () {
+        togglePanel($(this).attr("lay-filter"));
+      });
+      $("#more").click(function () {
+        toggleMore($(this), vditor);
+      });
     });
   </script>
 </head>
@@ -110,7 +210,7 @@
             <a href="javascript:;">统计数据</a>
             <dl class="layui-nav-child">
               <dd class="menu" lay-filter="history"><a href="javascript:;" tab_id="21">变更记录</a></dd>
-              <dd class="menu" lay-filter="system"><a href="javascript:;" tab_id="22">系统一览</a></dd>
+              <dd class="menu" lay-filter="system"><a href="javascript:;" tab_id="22">系统清单</a></dd>
               <dd class="menu"><a href="">超链接</a></dd>
             </dl>
           </li>
@@ -122,7 +222,8 @@
 
     <div class="layui-body">
       <!-- 内容主体区域 -->
-      <div id="home" class="layui-fluid layui-show-md-block" style="padding: 5px;">
+      <div id="home" class="layui-fluid layui-show-md-block"
+        style="padding: 5px; margin-left: 10px; margin-right: 10px;">
         <form class="layui-form" action="">
           <div class="layui-row layui-form-item">
             <div class="layui-col-md2">
@@ -152,103 +253,143 @@
         </form>
       </div>
 
-      <div id="register" class="layui-fluid layui-hide-md" style="padding: 5px;">
+      <div id="register" class="layui-fluid layui-hide-md" style="padding: 5px; margin-left: 10px; margin-right: 10px;">
         <form class="layui-form" action="">
           <fieldset class="layui-elem-field layui-field-title" style="margin-top: 5px;margin-bottom: 5px;">
             <legend>变更信息</legend>
           </fieldset>
-          <div class="layui-row layui-form-item">
-            <div class="layui-col-md2">
-              <div class="layui-input-inline">
-                <select name="modules" lay-verify="required" lay-search="">
-                  <option value="">变更系统</option>
-                  <option value="1">layer</option>
-                  <option value="2">form</option>
-                  <option value="3">layim</option>
-                  <option value="4">element</option>
-                </select>
+          <div class="layui-form-item">
+            <div class="layui-row">
+              <div class="layui-inline">
+                <label class="layui-form-label" style="width:6px;"><i class="fa fa-lg fa-cube"
+                    style="color:gray"></i></label>
+                <div class="layui-input-inline">
+                  <select name="modules" lay-verify="required" lay-search="">
+                    <option value="">变更系统</option>
+                    <option value="1">大投行业务平台</option>
+                    <option value="2">企业客户CRM</option>
+                    <option value="3">股权激励服务系统</option>
+                    <option value="4">网下投资者发行服务系统</option>
+                  </select>
+                </div>
               </div>
-            </div>
-            <div class="layui-col-md2">
-              <div class="layui-input-inline">
-                <select name="interest" lay-filter="aihao">
-                  <option value="">变更类型</option>
-                  <option value="0">写作</option>
-                  <option value="1">阅读</option>
-                  <option value="2">游戏</option>
-                  <option value="3">音乐</option>
-                  <option value="4">旅行</option>
-                </select>
+              <div class="layui-inline">
+                <label class="layui-form-label" style="width:6px;"><i class="fa fa-lg fa-ticket"
+                    style="color:gray"></i></label>
+                <div class="layui-input-inline">
+                  <select name="interest" lay-filter="aihao" lay-search="">
+                    <option value="">变更级别</option>
+                    <option value="0">[重大]其他</option>
+                    <option value="1">[重要]其他</option>
+                    <option value="2">[一般]其他</option>
+                    <option value="3">[简易]其他</option>
+                  </select>
+                </div>
               </div>
-            </div>
-            <div class="layui-col-md2">
-              <div class="layui-input-inline">
-                <input type="text" name="date" id="date" lay-verify="date" placeholder="投产时间" autocomplete="off"
-                  class="layui-input">
+              <div class="layui-inline">
+                <label class="layui-form-label" style="width:6px;"><i class="fa fa-lg fa-clock-o"
+                    style="color:gray"></i></label>
+                <div class="layui-input-inline">
+                  <input type="text" name="date" id="date" lay-verify="date" placeholder="投产时间" autocomplete="off"
+                    class="layui-input">
+                </div>
               </div>
-            </div>
-            <div class="layui-col-md2">
-              <div class="layui-input-inline">
-                <input type="text" name="title" required lay-verify="required" placeholder="投产方式" autocomplete="off"
-                  class="layui-input">
+              <div class="layui-inline">
+                <label class="layui-form-label" style="width:6px;"><i class="fa fa-lg fa-inbox"
+                    style="color:gray"></i></label>
+                <div class="layui-input-inline">
+                  <div id="kind" class="xm-select-demo"></div>
+                </div>
               </div>
-            </div>
-            <div class="layui-col-md4">
-              <div class="layui-input-inline">
-                <input type="text" name="title" required lay-verify="required" placeholder="变更标题" autocomplete="off"
-                  class="layui-input">
+              <div class="layui-inline">
+                <label class="layui-form-label" style="width:6px;"><i class="fa fa-lg fa-user-plus"
+                    style="color:gray"></i></label>
+                <div class="layui-input-inline">
+                  <div id="principle" class="xm-select-demo"></div>
+                </div>
+              </div>
+              <div class="layui-inline">
+                <div class="layui-input-inline" style="width:80px;margin-left:20px;">
+                  <input type="checkbox" name="" title="停机" style="width:10px;">
+                </div>
+              </div>
+
+              <div class="layui-inline">
+                <label class="layui-form-label" style="width:6px;"><i class="fa fa-lg fa-align-left"
+                    style="color:gray"></i></label>
+                <div class="layui-input-inline">
+                  <input type="text" name="title" required lay-verify="required" placeholder="变更标题" autocomplete="off"
+                    class="layui-input">
+                </div>
+              </div>
+              <div class="layui-inline">
+                <label class="layui-form-label" style="width:6px;"><i id="more" class="fa fa-lg fa-chevron-circle-down"
+                    style="color:gray"></i></label>
               </div>
             </div>
           </div>
 
+          <div id="full" class="layui-hide-md">
+            <div class="layui-form-item">
+              <div class="layui-col-md2">
+                <div class="layui-input-inline">
+                  <input type="text" name="title" required lay-verify="required" placeholder="需求编号" autocomplete="off"
+                    class="layui-input">
+                </div>
+              </div>
+              <div class="layui-col-md2">
+                <div class="layui-input-inline">
+                  <select name="interest" lay-filter="aihao" lay-search="">
+                    <option value="">需求等级</option>
+                    <option value="0">写作</option>
+                    <option value="1">阅读</option>
+                    <option value="2">游戏</option>
+                    <option value="3">音乐</option>
+                    <option value="4">旅行</option>
+                  </select>
+                </div>
+              </div>
 
-          <div class="layui-row layui-form-item">
-            <div class="layui-col-md2">
-              <div class="layui-input-inline">
-                <input type="text" name="title" required lay-verify="required" placeholder="需求编号" autocomplete="off"
-                  class="layui-input">
+              <div class="layui-col-md2">
+                <div class="layui-input-inline">
+                  <div class="layui-btn-group">
+                    <button type="button" class="layui-btn layui-btn-primary layui-btn">修复</button>
+                    <button type="button" class="layui-btn layui-btn-primary layui-btn">新特性</button>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="layui-col-md2">
-              <div class="layui-input-inline">
-                <select name="interest" lay-filter="aihao">
-                  <option value="">需求等级</option>
-                  <option value="0">写作</option>
-                  <option value="1">阅读</option>
-                  <option value="2">游戏</option>
-                  <option value="3">音乐</option>
-                  <option value="4">旅行</option>
-                </select>
+              <div class="layui-col-md2">
+                <div class="layui-input-inline">
+                  <div id="principle" class="xm-select-demo"></div>
+                </div>
               </div>
-            </div>
-            <div class="layui-col-md2">
-              <div class="layui-input-inline">
-                <select name="interest" lay-filter="aihao">
-                  <option value="">投产启停</option>
-                  <option value="0">写作</option>
-                  <option value="1">阅读</option>
-                  <option value="2">游戏</option>
-                  <option value="3">音乐</option>
-                  <option value="4">旅行</option>
-                </select>
-              </div>
-            </div>
-            <div class="layui-col-md2">
-              <div class="layui-input-inline">
-                <div id="principle" class="xm-select-demo"></div>
-              </div>
-            </div>
-            <div class="layui-col-md4">
-              <div class="layui-input-inline">
-                <input type="text" name="title" required lay-verify="required" placeholder="需求标题" autocomplete="off"
-                  class="layui-input">
+              <div class="layui-col-md4">
+                <div class="layui-input-inline" style="width: 100%">
+                  <input type="text" name="title" required lay-verify="required" placeholder="需求标题" autocomplete="off"
+                    class="layui-input">
+                </div>
               </div>
             </div>
           </div>
+
+          <div class="layui-tab layui-tab-brief" lay-filter="doc">
+            <ul class="layui-tab-title">
+              <li class="layui-this">投产手册</li>
+              <li>评审表</li>
+            </ul>
+            <div class="layui-tab-content">
+              <div class="layui-tab-item layui-show">
+                <div id="vditor" class="vditor layui-fluid"
+                  style="padding: 5px; margin-left: 10px; margin-right: 10px;"></div>
+              </div>
+              <div class="layui-tab-item">内容2</div>
+            </div>
+          </div>
+
         </form>
       </div>
 
-      <div id="review" class="layui-fluid layui-hide-md" style="padding: 5px;">
+      <div id="review" class="layui-fluid layui-hide-md" style="padding: 5px; margin-left: 10px; margin-right: 10px;">
         <div class="layui-row">
           <div class="layui-col-md4">
             review
@@ -259,7 +400,7 @@
         </div>
       </div>
 
-      <div id="myreg" class="layui-fluid layui-hide-md" style="padding: 5px;">
+      <div id="myreg" class="layui-fluid layui-hide-md" style="padding: 5px; margin-left: 10px; margin-right: 10px;">
         <div class="layui-row">
           <div class="layui-col-md4">
             myreg
@@ -270,7 +411,7 @@
         </div>
       </div>
 
-      <div id="history" class="layui-fluid layui-hide-md" style="padding: 5px;">
+      <div id="history" class="layui-fluid layui-hide-md" style="padding: 5px; margin-left: 10px; margin-right: 10px;">
         <div class="layui-row">
           <div class="layui-col-md4">
             history
@@ -281,7 +422,7 @@
         </div>
       </div>
 
-      <div id="system" class="layui-fluid layui-hide-md" style="padding: 5px;">
+      <div id="system" class="layui-fluid layui-hide-md" style="padding: 5px; margin-left: 10px; margin-right: 10px;">
         <div class="layui-row">
           <div class="layui-col-md4">
             system
@@ -292,9 +433,11 @@
         </div>
       </div>
 
+
+
     </div>
 
-    <div class="layui-footer">
+    <div id="footer" class="layui-footer">
       <!-- 底部固定区域 -->
       © layui.com - 底部固定区域
     </div>
