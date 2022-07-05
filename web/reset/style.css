@@ -1,40 +1,46 @@
 .vditor-reset ul ul ul {
   list-style-type: square !important;
 }
+
 .vditor-reset ul ul {
   list-style-type: circle !important;
 }
+
 .vditor-reset ul {
   list-style-type: disc !important;
 }
+
 .vditor-reset ul,
 .vditor-reset ol {
   padding-left: 2em;
   margin-top: 0;
   margin-bottom: 16px;
 }
-.vditor-reset li + li {
+
+.vditor-reset li+li {
   margin-top: 0.25em;
 }
 
-.vditor-reset ul > li {
-    list-style-type: disc;
+.vditor-reset ul>li {
+  list-style-type: disc;
 }
-.vditor-reset ul > li > ul > li{
-    list-style-type: circle;
+
+.vditor-reset ul>li>ul>li {
+  list-style-type: circle;
 }
-.vditor-reset ul > li > ul > li > ul > li{
-    list-style-type: square;
+
+.vditor-reset ul>li>ul>li>ul>li {
+  list-style-type: square;
 }
 
 .vditor-reset input[type=checkbox] {
   display: inline-block;
 }
 
-.vditor-reset ol > li {
-    margin-left: 20px;
-    padding-left: 4px;
-    list-style-type: decimal;
+.vditor-reset ol>li {
+  margin-left: 20px;
+  padding-left: 4px;
+  list-style-type: decimal;
 }
 
 /*.vditor-reset p,
@@ -59,7 +65,61 @@
     margin: 0.2em 0;
 }*/
 
+.layui-header {
+  height: 50px;
+}
 
+.layui-layout-admin .layui-logo {
+  line-height: 50px;
+}
+
+.layui-layout-admin .layui-body {
+  top: 50px;
+}
+
+.layui-layout-admin .layui-side {
+  top: 50px;
+}
+
+.layui-nav .layui-nav-item {
+  line-height: 50px;
+}
+
+.layui-nav-tree .layui-nav-item a {
+  height: 35px;
+  line-height: 35px;
+}
+
+.layui-input,
+.layui-select {
+  height: 30px;
+}
+
+.layui-form-label {
+  line-height: 10px;
+}
+
+.layui-form-item .layui-input-inline {
+  width: 160px;
+}
+
+.layui-tab-title {
+  height: 30px;
+}
+
+.layui-tab-title li {
+  height: 30px;
+  line-height: 30px;
+}
+
+.layui-tab-title li.layui-this::after {
+  height: 30px;
+}
+
+xm-select {
+  min-height: 30px !important;
+  line-height: 30px !important;
+}
 
 
 /*.header {

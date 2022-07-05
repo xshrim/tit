@@ -6,19 +6,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>开始使用layui</title>
   <link rel="stylesheet" href="./layui/css/layui.css">
-  <link rel="stylesheet" href="./layui/css/style.css">
   <link rel="stylesheet" href="./vditor/dist/index.css" />
-  <link rel="stylesheet" href="./layui/css/font-awesome.css" />
+  <link rel="stylesheet" href="./reset/font-awesome.css" />
+  <link rel="stylesheet" href="./reset/style.css">
   <script src="./layui/layui.js"></script>
   <script src="./layui/xm-select.js"></script>
   <script src="./vditor/dist/index.min.js"></script>
   <script>
     //JavaScript代码区域
     var $ = layui.jquery;
+    var util = layui.util;
     var element = layui.element;
     var laydate = layui.laydate;
 
-    var panels = ["home", "register", "review", "myreg", "history", "system"];
+    var panels = ["home", "change", "review", "ichange", "ireview", "itemplate", "idraft", "history", "system"];
 
     function getRect(elem) {
       //var rect = elem.getBoundingClientRect();
@@ -41,71 +42,13 @@
       return Math.floor(fromRect.top) - Math.floor(toRect.top)
     }
 
-    function togglePanel(panel) {
-      panels.forEach(function (item, index, array) {
-        // item数组中的当前项, index当前项的索引, array原始数组；
-        if (panel === item) {
-          $(`#${item}`).removeClass('layui-hide-md');
-          $(`#${item}`).addClass('layui-show-md-block');
-        } else {
-          $(`#${item}`).addClass('layui-hide-md');
-          $(`#${item}`).removeClass('layui-show-md-block');
-        }
-      });
-    }
-    function toggleMore(elem, vd) {
-      if (elem.hasClass("fa-chevron-circle-down")) {
-        elem.removeClass('fa-chevron-circle-down');
-        elem.addClass('fa-chevron-circle-up');
-        $("#full").removeClass('layui-hide-md');
-      } else {
-        elem.addClass('fa-chevron-circle-down');
-        elem.removeClass('fa-chevron-circle-up');
-        $("#full").addClass('layui-hide-md');
+    function initVditor() {
+      if (window.vditor !== undefined) {
+        window.vditor.destroy;
       }
-
-      console.log(marginTop($("#footer"), $("#vditor")));
-      //vd.vditor.options.height = marginTop($("#footer"), $("#vditor"));
-    }
-
-    $(function () {
-
-      togglePanel("register");
-
-
-      //日期
-      laydate.render({
-        elem: '#date', type: 'datetime'
-      });
-      var principle = xmSelect.render({
-        el: '#principle',
-        tips: '投产人员',
-        filterable: true,
-        data: [
-          { name: '水果', value: 1 },
-          { name: '蔬菜', value: 2 },
-          { name: '桌子', value: 3 },
-          { name: '北京', value: 4 },
-        ]
-      });
-      var kind = xmSelect.render({
-        el: '#kind',
-        tips: '投产类型',
-        filterable: true,
-        data: [
-          { name: '水果', value: 1 },
-          { name: '蔬菜', value: 2 },
-          { name: '桌子', value: 3 },
-          { name: '北京', value: 4 },
-        ]
-      });
-
-      // console.log((document.documentElement.scrollHeight > document.documentElement.clientHeight) ? document.documentElement.scrollHeight : document.documentElement.clientHeight);
-      //var vpos = getRect(document.getElementById("vditor"));
-
-      const vditor = new Vditor('vditor', {
+      window.vditor = new Vditor('vditor', {
         "cdn": "./vditor",
-        "height": marginTop($("#footer"), $("#vditor")),
+        "height": marginTop($("#footer"), $("#vditor")) - 40,
         //"theme": "dark",
         //"icon": "material",
         "cache": {
@@ -142,12 +85,95 @@
           ]
         },
       });
+    }
+
+    function togglePanel(panel) {
+      panels.forEach(function (item, index, array) {
+        // item数组中的当前项, index当前项的索引, array原始数组；
+        if (panel === item) {
+          $(`#${item}`).removeClass('layui-hide-md');
+          $(`#${item}`).addClass('layui-show-md-block');
+        } else {
+          $(`#${item}`).addClass('layui-hide-md');
+          $(`#${item}`).removeClass('layui-show-md-block');
+        }
+      });
+    }
+    function toggleMore(elem, vd) {
+      if (elem.hasClass("fa-chevron-circle-down")) {
+        elem.removeClass('fa-chevron-circle-down');
+        elem.addClass('fa-chevron-circle-up');
+        $("#full").removeClass('layui-hide-md');
+      } else {
+        elem.addClass('fa-chevron-circle-down');
+        elem.removeClass('fa-chevron-circle-up');
+        $("#full").addClass('layui-hide-md');
+      }
+
+      console.log(marginTop($("#footer"), $("#vditor")));
+      //vd.vditor.options.height = marginTop($("#footer"), $("#vditor"));
+    }
+
+    $(function () {
+
+      togglePanel("change");
+
+
+      //日期
+      laydate.render({
+        elem: '#date', type: 'datetime'
+      });
+      var principle = xmSelect.render({
+        el: '#principle',
+        tips: '投产人员',
+        filterable: true,
+        data: [
+          { name: '水果', value: 1 },
+          { name: '蔬菜', value: 2 },
+          { name: '桌子', value: 3 },
+          { name: '北京', value: 4 },
+        ]
+      });
+      var kind = xmSelect.render({
+        el: '#kind',
+        tips: '投产类型',
+        filterable: true,
+        data: [
+          { name: '水果', value: 1 },
+          { name: '蔬菜', value: 2 },
+          { name: '桌子', value: 3 },
+          { name: '北京', value: 4 },
+        ]
+      });
+
+      // console.log((document.documentElement.scrollHeight > document.documentElement.clientHeight) ? document.documentElement.scrollHeight : document.documentElement.clientHeight);
+      //var vpos = getRect(document.getElementById("vditor"));
+
+      initVditor();
 
       $(".menu").click(function () {
         togglePanel($(this).attr("lay-filter"));
       });
       $("#more").click(function () {
         toggleMore($(this), vditor);
+      });
+
+      //头部事件
+      util.event('lay-header-event', {
+        //左侧菜单事件
+        menuLeft: function (othis) {
+          layer.msg('展开左侧菜单的操作', { icon: 0 });
+        }
+        , menuRight: function () {
+          layer.open({
+            type: 1
+            , content: '<div style="padding: 15px;">处理右侧面板的操作</div>'
+            , area: ['260px', '100%']
+            , offset: 'rt' //右上角
+            , anim: 5
+            , shadeClose: true
+          });
+        }
       });
     });
   </script>
@@ -198,19 +224,28 @@
           <li class="layui-nav-item layui-nav-itemed">
             <a class="" href="javascript:;">投产变更</a>
             <dl class="layui-nav-child">
-              <dd class="menu" lay-filter="register"><a href="javascript:;" tab_id="11"
-                  data-url="register.html">变更登记</a></dd>
+              <dd class="menu" lay-filter="change"><a href="javascript:;" tab_id="11" data-url="change.html">变更登记</a>
+              </dd>
               <dd class="menu" lay-filter="review"><a href="javascript:;" tab_id="12" data-url="review.html">变更评审</a>
               </dd>
-              <dd class="menu" lay-filter="myreg"><a href="javascript:;" tab_id="13" data-url="myreg.html">我的变更</a></dd>
               <dd class="menu"><a href="javascript:;" tab_id="14" data-url="../index.html">超链接</a></dd>
             </dl>
           </li>
           <li class="layui-nav-item">
-            <a href="javascript:;">统计数据</a>
+            <a href="javascript:;">我的</a>
             <dl class="layui-nav-child">
-              <dd class="menu" lay-filter="history"><a href="javascript:;" tab_id="21">变更记录</a></dd>
-              <dd class="menu" lay-filter="system"><a href="javascript:;" tab_id="22">系统清单</a></dd>
+              <dd class="menu" lay-filter="ichange"><a href="javascript:;" tab_id="21">我的变更</a></dd>
+              <dd class="menu" lay-filter="ireview"><a href="javascript:;" tab_id="22">我的评审</a></dd>
+              <dd class="menu" lay-filter="itemplate"><a href="javascript:;" tab_id="23">我的模板</a></dd>
+              <dd class="menu" lay-filter="idraft"><a href="javascript:;" tab_id="24">我的草稿</a></dd>
+              <dd class="menu"><a href="">超链接</a></dd>
+            </dl>
+          </li>
+          <li class="layui-nav-item">
+            <a href="javascript:;">统计分析</a>
+            <dl class="layui-nav-child">
+              <dd class="menu" lay-filter="history"><a href="javascript:;" tab_id="31">变更列表</a></dd>
+              <dd class="menu" lay-filter="system"><a href="javascript:;" tab_id="32">系统清单</a></dd>
               <dd class="menu"><a href="">超链接</a></dd>
             </dl>
           </li>
@@ -253,12 +288,12 @@
         </form>
       </div>
 
-      <div id="register" class="layui-fluid layui-hide-md" style="padding: 5px; margin-left: 10px; margin-right: 10px;">
+      <div id="change" class="layui-fluid layui-hide-md" style="padding: 8px; margin-left: 10px; margin-right: 10px;">
         <form class="layui-form" action="">
-          <fieldset class="layui-elem-field layui-field-title" style="margin-top: 5px;margin-bottom: 5px;">
+          <!-- <fieldset class="layui-elem-field layui-field-title" style="margin-top: 5px;margin-bottom: 5px;">
             <legend>变更信息</legend>
-          </fieldset>
-          <div class="layui-form-item">
+          </fieldset> -->
+          <div class="layui-form-item" style="margin-bottom: 0px;">
             <div class="layui-row">
               <div class="layui-inline">
                 <label class="layui-form-label" style="width:6px;"><i class="fa fa-lg fa-cube"
@@ -317,7 +352,7 @@
               <div class="layui-inline">
                 <label class="layui-form-label" style="width:6px;"><i class="fa fa-lg fa-align-left"
                     style="color:gray"></i></label>
-                <div class="layui-input-inline">
+                <div class="layui-input-inline" style="width: 250px;">
                   <input type="text" name="title" required lay-verify="required" placeholder="变更标题" autocomplete="off"
                     class="layui-input">
                 </div>
@@ -372,12 +407,12 @@
             </div>
           </div>
 
-          <div class="layui-tab layui-tab-brief" lay-filter="doc">
+          <div class="layui-tab layui-tab-brief" lay-filter="doc" style="margin-top: 0px; margin-bottom: 0px;">
             <ul class="layui-tab-title">
               <li class="layui-this">投产手册</li>
               <li>评审表</li>
             </ul>
-            <div class="layui-tab-content">
+            <div class="layui-tab-content" style="padding-top: 5px; padding-bottom: 5px;">
               <div class="layui-tab-item layui-show">
                 <div id="vditor" class="vditor layui-fluid"
                   style="padding: 5px; margin-left: 10px; margin-right: 10px;"></div>
@@ -385,7 +420,13 @@
               <div class="layui-tab-item">内容2</div>
             </div>
           </div>
+          <div id="chsubmit" class="layui-btn-container" style="margin-left: 10px;">
 
+            <button type="button" class="layui-btn layui-btn-sm" style="margin-bottom: 0px;">提交</button>
+            <button type="button" class="layui-btn layui-btn-sm" style="margin-bottom: 0px;">保存</button>
+            <button type="button" class="layui-btn layui-btn-sm" style="margin-bottom: 0px;">模板</button>
+            <button type="button" class="layui-btn layui-btn-sm" style="margin-bottom: 0px;">清空</button>
+          </div>
         </form>
       </div>
 
@@ -400,10 +441,41 @@
         </div>
       </div>
 
-      <div id="myreg" class="layui-fluid layui-hide-md" style="padding: 5px; margin-left: 10px; margin-right: 10px;">
+      <div id="ichange" class="layui-fluid layui-hide-md" style="padding: 5px; margin-left: 10px; margin-right: 10px;">
         <div class="layui-row">
           <div class="layui-col-md4">
-            myreg
+            ichange
+          </div>
+          <div class="layui-col-md4 layui-col-md-offset4">
+            偏移5列，从而在最右
+          </div>
+        </div>
+      </div>
+      <div id="ireview" class="layui-fluid layui-hide-md" style="padding: 5px; margin-left: 10px; margin-right: 10px;">
+        <div class="layui-row">
+          <div class="layui-col-md4">
+            ireview
+          </div>
+          <div class="layui-col-md4 layui-col-md-offset4">
+            偏移5列，从而在最右
+          </div>
+        </div>
+      </div>
+      <div id="itemplate" class="layui-fluid layui-hide-md"
+        style="padding: 5px; margin-left: 10px; margin-right: 10px;">
+        <div class="layui-row">
+          <div class="layui-col-md4">
+            itemplate
+          </div>
+          <div class="layui-col-md4 layui-col-md-offset4">
+            偏移5列，从而在最右
+          </div>
+        </div>
+      </div>
+      <div id="idraft" class="layui-fluid layui-hide-md" style="padding: 5px; margin-left: 10px; margin-right: 10px;">
+        <div class="layui-row">
+          <div class="layui-col-md4">
+            idraft
           </div>
           <div class="layui-col-md4 layui-col-md-offset4">
             偏移5列，从而在最右
@@ -439,10 +511,9 @@
 
     <div id="footer" class="layui-footer">
       <!-- 底部固定区域 -->
-      © layui.com - 底部固定区域
+      底部固定
     </div>
   </div>
-
 </body>
 
 </html>
