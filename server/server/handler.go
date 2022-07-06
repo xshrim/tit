@@ -3,12 +3,15 @@ package server
 import "net/http"
 import "github.com/gin-gonic/gin"
 
-func handle(hd string) func(*gin.Context) {
-	return func(c *gin.Context) {
+var handle map[string]func(*gin.Context)
+
+func init() {
+	handle = make(map[string]func(*gin.Context))
+	handle["index"] = func(c *gin.Context) {
 		c.String(http.StatusOK, "Hello World!")
 	}
 
-	return func(c *gin.Context) {
+	handle["ping"] = func(c *gin.Context) {
 		c.String(http.StatusOK, "pong")
 	}
 }
