@@ -1,0 +1,22 @@
+[
+  {
+    "id": "chenpan1",
+    "name": "陈盼",
+    "uname": "陈盼1",
+    "email": "chenpan1@cmschina.com.cn",
+    "phone": "17671753579",
+    "dept": "综合业务开发部",
+    "group": "企业业务开发团队",
+    "reviewer": "group"
+  },
+  {
+    "id": "shiguozhong",
+    "name": "石国忠",
+    "uname": "石国忠",
+    "email": "shiguozhong@cmschina.com.cn",
+    "phone": "15013732925",
+    "dept": "综合业务开发部",
+    "group": "AI开发团队",
+    "reviewer": "dept"
+  }
+]
