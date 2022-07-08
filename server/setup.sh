@@ -51,6 +51,8 @@ db.dropDatabase()
 
 db.foo.drop()
 
+db.foo.remove({})
+
 db.stats()
 
 db.foo.status()
@@ -60,4 +62,5 @@ db.foo.insert({a:1, b:2})
 db.foo.findOne()
 db.foo.find().pretty()
 db.foo.find().count()
+
 

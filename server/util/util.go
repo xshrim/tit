@@ -13,7 +13,7 @@ import (
 	//	"go.mongodb.org/mongo-driver/bson"
 )
 
-func impProject(fpath string) {
+func convertProject(fpath string) {
 	var projs []interface{}
 	for line := range tk.IterFile(fpath) {
 		data := strings.Split(line, ",")
@@ -41,6 +41,24 @@ func impProject(fpath string) {
 	// jsb, _ := json.Marshal(projs)
 	// gol.Prtln(string(jsb))
 
+}
+
+func impProject(fpath string) {
+	var projects []model.Project
+	data := tk.ReadFile(fpath)
+	if err := json.Unmarshal(data, &projects); err != nil {
+		gol.Prtln(err)
+	}
+
+	gol.Prtln(projects)
+	mgo := database.New("tit", "project")
+
+	tmp := make([]interface{}, len(projects))
+	for i, v := range projects {
+		tmp[i] = v
+	}
+	result, err := mgo.InsertMany(tmp)
+	gol.Prtln(result, err)
 }
 
 func impUser(fpath string) {

@@ -11,6 +11,10 @@ func route(r *gin.Engine) {
 	}
 
 	{
+		auth := v1.Group("/auth")
+	}
+
+	{
 		user := v1.Group("/user")
 		user.POST("/info", UserInfo)
 		user.POST("/list", UserList)
