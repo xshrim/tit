@@ -11,7 +11,14 @@ import (
 )
 
 func Index(c *gin.Context) {
-	c.String(http.StatusOK, "Hello World!")
+
+	user := c.MustGet("user").(model.User)
+
+	c.JSON(http.StatusOK, gin.H{
+		"code": 200,
+		"msg":  "success",
+		"data": gin.H{"user": user},
+	})
 }
 
 func Ping(c *gin.Context) {
@@ -43,4 +50,39 @@ func UserList(c *gin.Context) {
 	result.All(context.TODO(), &users)
 	fmt.Println(users)
 
+}
+
+func Issue(c *gin.Context) {
+	var uq model.UserReq
+	if err := c.ShouldBind(&uq); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"code": 601,
+			"msg":  "invalid parameters",
+		})
+	}
+
+	var user model.User
+
+	mgo := database.New("tit", "user")
+	if uq.ID != "" {
+
+		_ = mgo.FindOne("id", uq.ID).Decode(&user)
+	} else if uq.Email != "" {
+		_ = mgo.FindOne("email", uq.Email).Decode(&user)
+	}
+
+	if uq.Passwd == user.Passwd {
+		tokenString, _ := GenToken(user)
+		c.JSON(http.StatusOK, gin.H{
+			"code": 200,
+			"msg":  "success",
+			"data": gin.H{"token": tokenString},
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"code": 401,
+		"msg":  "authenticate failed",
+	})
 }

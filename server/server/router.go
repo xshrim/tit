@@ -3,16 +3,14 @@ package server
 import "github.com/gin-gonic/gin"
 
 func route(r *gin.Engine) {
+
+	r.GET("/", JWTAuthMiddleWare(), Index)
+
 	v1 := r.Group("/api/v1")
 
-	{
-		core := v1.Group("/core")
-		core.GET("/", Index)
-	}
-
-	{
-		auth := v1.Group("/auth")
-	}
+	// {
+	// 	auth := v1.Group("/auth")
+	// }
 
 	{
 		user := v1.Group("/user")
