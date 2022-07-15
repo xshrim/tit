@@ -1,0 +1,57 @@
+[
+  {
+    "uid": "zhouguoqing2",
+    "name": "周国庆",
+    "uname": "周国庆2",
+    "passwd": "zgq",
+    "email": "zhouguoqing2@cmschina.com.cn",
+    "phone": "17625913033",
+    "dept": "综合业务开发部",
+    "group": "企业线研发团队",
+    "role": "group-member"
+  },
+  {
+    "uid": "chenpan1",
+    "name": "陈盼",
+    "uname": "陈盼1",
+    "passwd": "Maple#233",
+    "email": "chenpan1@cmschina.com.cn",
+    "phone": "17671753579",
+    "dept": "综合业务开发部",
+    "group": "企业线研发团队",
+    "role": "group-reviewer"
+  },
+  {
+    "uid": "chennanzhen",
+    "name": "陈南真",
+    "uname": "陈南真",
+    "passwd": "cnz",
+    "email": "chennanzhen@cmschina.com.cn",
+    "phone": "18070505284",
+    "dept": "综合业务开发部",
+    "group": "企业线研发团队",
+    "role": "group-juror"
+  },
+  {
+    "uid": "luoxiaosheng",
+    "name": "罗晓生",
+    "uname": "罗晓生",
+    "passwd": "cnz",
+    "email": "luoxiaosheng@cmschina.com.cn",
+    "phone": "13922828195",
+    "dept": "综合业务开发部",
+    "group": "企业线研发团队",
+    "role": "group-leader"
+  },
+  {
+    "uid": "shiguozhong",
+    "name": "石国忠",
+    "uname": "石国忠",
+    "passwd": "sgz",
+    "email": "shiguozhong@cmschina.com.cn",
+    "phone": "15013732925",
+    "dept": "综合业务开发部",
+    "group": "AI研发团队",
+    "role": "group-leader，dept-reviewer"
+  }
+]
